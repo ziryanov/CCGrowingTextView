@@ -1,8 +1,8 @@
 Pod::Spec.new do |s|
   s.name         = "CCGrowingTextView"
-  s.version      = "0.1"
-  s.summary      = "Multi-line/Autoresizing UITextView similar to SMS-app."
-  s.description  = "An UITextView which grows/shrinks with the text"
+  s.version      = "0.1.1"
+  s.summary      = "A lightweight UITextView subclass that is growing and shrinking in size"
+  s.description  = "This UITextView is a lightweight solution that mimic iOS Messages behaviour and use Auto Layout. See to the example project to see how its supposed to be used. "
   s.homepage     = "https://github.com/ziryanov/CCGrowingTextView"
   s.license      = { :type => 'MIT', :file => 'LICENSE.txt' }
   s.author       = { "Ivan Ziryanov" => "ivan.ziryanov@gmail.com" }
