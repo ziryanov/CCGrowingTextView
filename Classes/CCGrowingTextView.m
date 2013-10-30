@@ -71,4 +71,10 @@
     return self.contentSize;
 }
 
+- (void)setText:(NSString *)text
+{
+    super.text = text;
+    [self invalidateIntrinsicContentSize];
+}
+
 @end
