@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "CCGrowingTextView.h"
 
 @interface UIView (keyboardAnimation)
 
@@ -43,7 +44,7 @@ UIViewAnimationOptions curveOptionsFromCurve(UIViewAnimationCurve curve)
 
 @interface ViewController ()
 
-@property (nonatomic) IBOutlet UITextView *textView;
+@property (nonatomic) IBOutlet CCGrowingTextView *textView;
 @property (nonatomic) IBOutlet NSLayoutConstraint *bottomConstrait;
 
 @property (nonatomic) NSMutableArray *notifications;
@@ -59,6 +60,8 @@ UIViewAnimationOptions curveOptionsFromCurve(UIViewAnimationCurve curve)
     [super viewDidLoad];
 
     _notifications = [NSMutableArray new];
+    
+    _textView.maxNumberOfLine = 4;
     
     __weak ViewController *wself = self;
     [[NSNotificationCenter defaultCenter] addObserverForName:UIKeyboardWillShowNotification object:0 queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {

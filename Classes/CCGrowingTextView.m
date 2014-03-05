@@ -71,11 +71,12 @@
 - (void)setMaxNumberOfLine:(NSUInteger)maxNumberOfLine
 {
     _maxNumberOfLine = maxNumberOfLine;
-    NSString* text = @"\n";
+    NSString* text = @"1";
     for (NSUInteger i = 0; i < maxNumberOfLine; i++) {
-        text = [text stringByAppendingString:@"\n"];
+        text = [text stringByAppendingString:@"\n1"];
     }
-    self.maxHeight = [text sizeWithAttributes:@{NSFontAttributeName: self.font}].height;
+    NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:text attributes:@{ NSFontAttributeName: self.font }];
+    self.maxHeight = [attributedText size].height;
 }
 
 - (void)setFont:(UIFont *)font
