@@ -61,6 +61,12 @@ UIViewAnimationOptions curveOptionsFromCurve(UIViewAnimationCurve curve)
 
     _notifications = [NSMutableArray new];
     
+    [[CCGrowingTextView appearance] setPlaceholderColor:[UIColor darkGrayColor]];
+    
+    _textView.placeholder = @"Enter text. You can use line break symbols or just type until it refresh its height";
+    if ([_textView respondsToSelector:@selector(textContainerInset)])
+        _textView.textContainerInset = UIEdgeInsetsMake(10, 10, 10, 10);
+    _textView.font = [UIFont boldSystemFontOfSize:25];
     _textView.maxNumberOfLine = 4;
     
     __weak ViewController *wself = self;
