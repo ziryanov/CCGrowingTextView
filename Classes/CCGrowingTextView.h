@@ -11,7 +11,7 @@
 @interface CCGrowingTextView : UITextView
 
 @property (nonatomic) NSString *placeholder;
-@property (nonatomic) UIColor *placeholderColor; UI_APPEARANCE_SELECTOR
+@property (nonatomic) UIColor *placeholderColor UI_APPEARANCE_SELECTOR;
 
 @property (nonatomic) NSUInteger maxNumberOfLine;
 
