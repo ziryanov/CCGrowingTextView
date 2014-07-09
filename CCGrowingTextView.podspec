@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "CCGrowingTextView"
-  s.version      = "0.4.1"
+  s.version      = "0.4.2"
   s.summary      = "A lightweight UITextView subclass that is growing and shrinking in size"
   s.description  = "This UITextView is a lightweight solution that mimic iOS Messages behaviour and use Auto Layout. See to the example project to see how its supposed to be used. "
   s.homepage     = "https://github.com/ziryanov/CCGrowingTextView"
