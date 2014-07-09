@@ -86,6 +86,14 @@
     [self CCGrowingTextView_updateHeight];
 }
 
+- (void)setAttributedText:(NSAttributedString *)attributedText
+{
+    [super setAttributedText:attributedText];
+    
+    _placeholderLabel.hidden = attributedText.string.length > 0;
+    [self CCGrowingTextView_updateHeight];
+}
+
 - (void)recalculateMaxHeight
 {
     NSString* text = @"1";
