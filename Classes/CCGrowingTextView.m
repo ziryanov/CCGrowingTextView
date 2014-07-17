@@ -45,7 +45,6 @@
     __weak CCGrowingTextView *wself = self;
     _CCGrowingTextViewTextChangedNotification = [[NSNotificationCenter defaultCenter] addObserverForName:UITextViewTextDidChangeNotification object:self queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
         [wself CCGrowingTextView_updatePlaceholder];
-        [wself CCGrowingTextView_updateHeight];
     }];
     
     _placeholderLabel = [UILabel new];
@@ -58,24 +57,25 @@
     _placeholderLabel.textColor = [[self.class appearance] placeholderColor] ?: [UIColor lightGrayColor];
     [self addSubview:_placeholderLabel];
     [self CCGrowingTextView_updatePlaceholder];
-}
-
-- (void)didMoveToSuperview
-{
-    [super didMoveToSuperview];
-    if (self.text.length)
-        return;
-    [self CCGrowingTextView_updateHeight];
+    
+    [self addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:0];
 }
 
 - (void)dealloc
 {
+    [self removeObserver:self forKeyPath:@"contentSize"];
     [[NSNotificationCenter defaultCenter] removeObserver:_CCGrowingTextViewTextChangedNotification];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    [self invalidateIntrinsicContentSize];
 }
 
 - (CGSize)intrinsicContentSize
 {
-    return self.maxNumberOfLine ? CGSizeMake(self.contentSize.width, MAX(_placeholderLabel.frame.size.height, MIN(self.contentSize.height, self.maxHeight))) : self.contentSize;
+    CGFloat height = self.maxNumberOfLine ? MAX(_placeholderLabel.frame.size.height, MIN(self.contentSize.height, self.maxHeight)) : self.contentSize.height;
+    return CGSizeMake(UIViewNoIntrinsicMetric, height);
 }
 
 - (void)setText:(NSString *)text
@@ -83,7 +83,6 @@
     [super setText:text];
     
     _placeholderLabel.hidden = text.length > 0;
-    [self CCGrowingTextView_updateHeight];
 }
 
 - (void)setAttributedText:(NSAttributedString *)attributedText
@@ -91,10 +90,9 @@
     [super setAttributedText:attributedText];
     
     _placeholderLabel.hidden = attributedText.string.length > 0;
-    [self CCGrowingTextView_updateHeight];
 }
 
-- (void)recalculateMaxHeight
+- (void)CCGrowingTextView_recalculateMaxHeight
 {
     NSString* text = @"1";
     for (NSUInteger i = 1; i < _maxNumberOfLine; i++) {
@@ -109,13 +107,13 @@
 - (void)setMaxNumberOfLine:(NSUInteger)maxNumberOfLine
 {
     _maxNumberOfLine = maxNumberOfLine;
-    [self recalculateMaxHeight];
+    [self CCGrowingTextView_recalculateMaxHeight];
 }
 
 - (void)setFont:(UIFont *)font
 {
     [super setFont:font];
-    [self recalculateMaxHeight];
+    [self CCGrowingTextView_recalculateMaxHeight];
     _placeholderLabel.font = font;
     [self CCGrowingTextView_updatePlaceholderLabelHeight];
 }
@@ -123,7 +121,7 @@
 - (void)setContentInset:(UIEdgeInsets)contentInset
 {
     [super setContentInset:contentInset];
-    [self recalculateMaxHeight];
+    [self CCGrowingTextView_recalculateMaxHeight];
 }
 
 - (void)setTextContainerInset:(UIEdgeInsets)textContainerInset
@@ -132,15 +130,11 @@
     [self CCGrowingTextView_updatePlaceholderLabelHorizontalSize];
 }
 
-- (void)CCGrowingTextView_updateHeight
+- (void)setFrame:(CGRect)frame
 {
-    __weak CCGrowingTextView *wself = self;
-    double delayInSeconds = .05;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        if (wself.contentSize.height != wself.frame.size.height)
-            [wself invalidateIntrinsicContentSize];
-    });
+    [super setFrame:frame];
+    [self CCGrowingTextView_updatePlaceholderLabelHorizontalSize];
+    [self CCGrowingTextView_recalculateMaxHeight];
 }
 
 - (void)CCGrowingTextView_updatePlaceholderLabelHeight
