@@ -47,6 +47,8 @@ UIViewAnimationOptions curveOptionsFromCurve(UIViewAnimationCurve curve)
 @property (nonatomic) IBOutlet CCGrowingTextView *textView;
 @property (nonatomic) IBOutlet NSLayoutConstraint *bottomConstrait;
 
+@property (nonatomic) CCGrowingTextView *label;
+
 @property (nonatomic) NSMutableArray *notifications;
 
 - (IBAction)viewTapped;
@@ -58,6 +60,14 @@ UIViewAnimationOptions curveOptionsFromCurve(UIViewAnimationCurve curve)
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    _label = [CCGrowingTextView new];
+    _label.translatesAutoresizingMaskIntoConstraints = NO;
+    _label.userInteractionEnabled = NO;
+    _label.placeholder = @"Just for test";
+    [self.view addSubview:_label];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(20)-[_label]-(20)-|" options:0 metrics:0 views:NSDictionaryOfVariableBindings(_label)]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(40)-[_label]" options:0 metrics:0 views:NSDictionaryOfVariableBindings(_label)]];
 
     _notifications = [NSMutableArray new];
     

@@ -120,19 +120,26 @@
 
 - (void)setContentInset:(UIEdgeInsets)contentInset
 {
+    if (UIEdgeInsetsEqualToEdgeInsets(self.contentInset, contentInset))
+        return;
     [super setContentInset:contentInset];
     [self CCGrowingTextView_recalculateMaxHeight];
 }
 
 - (void)setTextContainerInset:(UIEdgeInsets)textContainerInset
 {
+    if (UIEdgeInsetsEqualToEdgeInsets(self.textContainerInset, textContainerInset))
+        return;
     [super setTextContainerInset:textContainerInset];
     [self CCGrowingTextView_updatePlaceholderLabelHorizontalSize];
 }
 
-- (void)setFrame:(CGRect)frame
+- (void)setBounds:(CGRect)bounds
 {
-    [super setFrame:frame];
+    BOOL sizeChanged = bounds.size.width != self.bounds.size.width || bounds.size.height != self.bounds.size.height;
+    [super setBounds:bounds];
+    if (!sizeChanged)
+        return;
     [self CCGrowingTextView_updatePlaceholderLabelHorizontalSize];
     [self CCGrowingTextView_recalculateMaxHeight];
 }
