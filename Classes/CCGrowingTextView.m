@@ -13,9 +13,7 @@
 @interface CCGrowingTextView()
 
 @property (nonatomic) id CCGrowingTextViewTextChangedNotification;
-
 @property (nonatomic) UILabel *placeholderLabel;
-
 @property (nonatomic) CGFloat maxHeight;
 
 @end
@@ -95,9 +93,8 @@
 - (void)CCGrowingTextView_recalculateMaxHeight
 {
     NSString* text = @"1";
-    for (NSUInteger i = 1; i < _maxNumberOfLine; i++) {
+    for (NSUInteger i = 1; i < _maxNumberOfLine; i++)
         text = [text stringByAppendingString:@"\n1"];
-    }
     NSString *originalText = self.text;
     self.text = text;
     self.maxHeight = [self sizeThatFits:CGSizeMake(self.frame.size.width, MAXFLOAT)].height;
@@ -118,6 +115,13 @@
     [self CCGrowingTextView_updatePlaceholderLabelHeight];
 }
 
+- (void)setContentOffset:(CGPoint)contentOffset
+{
+    if (fabs(self.contentSize.height - self.bounds.size.height) < 1 && contentOffset.y > 0)
+        contentOffset.y = 0;
+    super.contentOffset = contentOffset;
+}
+
 - (void)setContentInset:(UIEdgeInsets)contentInset
 {
     if (UIEdgeInsetsEqualToEdgeInsets(self.contentInset, contentInset))
@@ -136,9 +140,9 @@
 
 - (void)setBounds:(CGRect)bounds
 {
-    BOOL sizeChanged = bounds.size.width != self.bounds.size.width || bounds.size.height != self.bounds.size.height;
+    BOOL widthChanged = bounds.size.width != self.bounds.size.width;
     [super setBounds:bounds];
-    if (!sizeChanged)
+    if (!widthChanged)
         return;
     [self CCGrowingTextView_updatePlaceholderLabelHorizontalSize];
     [self CCGrowingTextView_recalculateMaxHeight];
